@@ -1,0 +1,2327 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Space 550 — A San Francisco Nightclub</title>
+<meta name="description" content="Space 550 — San Francisco's late-night cathedral for dance music. Events, tickets, VIP reservations, private bookings.">
+
+<!--
+═══════════════════════════════════════════════════════════════════════════
+  SPACE 550 — WEBSITE
+  ═══════════════════════════════════════════════════════════════════════════
+
+  FOLDER STRUCTURE (create these next to this HTML file):
+
+  /images/
+    hero-bg.jpg        ← main hero background (wide, dramatic)
+    about-1.jpg         ← manifesto / about section
+    venue-1.jpg         ← Main Floor (portrait)
+    venue-2.jpg         ← VIP Lounge (portrait)
+    venue-3.jpg         ← Rooftop (portrait)
+    venue-4.jpg         ← Mezzanine (portrait)
+    event-1.jpg         ← event thumbnails (landscape)
+    event-2.jpg
+    event-3.jpg
+    event-4.jpg
+    event-5.jpg
+    event-6.jpg
+    gallery-1.jpg       ← gallery grid (portrait or square)
+    gallery-2.jpg
+    gallery-3.jpg
+    gallery-4.jpg
+    gallery-5.jpg
+    gallery-6.jpg
+    contact-bg.jpg      ← contact section background
+    parallax-bg.jpg     ← parallax break background
+
+  /audio/
+    ambient.mp3         ← background music loop
+
+  TO SWAP ANY IMAGE:
+    Replace the file with the same name. Done.
+    Example: drop a new hero-bg.jpg into /images/ — site updates instantly.
+
+  TO SWAP MUSIC:
+    Replace audio/ambient.mp3 with a new file of the same name.
+
+  RUN download-images.sh TO FETCH ALL 7 PROVIDED PHOTOS AUTOMATICALLY.
+
+═══════════════════════════════════════════════════════════════════════════
+-->
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;500;600;700&family=Inter:wght@300;400;500&display=swap">
+
+<style>
+/* ─────────────────────────────────────────────────────────────────
+   TOKENS
+   ───────────────────────────────────────────────────────────────── */
+:root {
+  --jungle-deep:      #05140A;
+  --jungle-primary:   #0D2818;
+  --jungle-mid:       #0a1f12;
+  --jungle-secondary: #1A4D2E;
+  --gold:             #C9A227;
+  --gold-light:       #D4AF37;
+  --gold-dark:        #B8860B;
+  --ivory:            #F5F5DC;
+  --moss:             #8FBC8F;
+  --hairline:         rgba(201, 162, 39, 0.22);
+  --hairline-strong:  rgba(201, 162, 39, 0.45);
+  --ease-quiet:       cubic-bezier(.22, 1, .36, 1);
+  --ease-precise:     cubic-bezier(.4, 0, .2, 1);
+  --ease-emphasis:    cubic-bezier(.16, 1, .3, 1);
+
+  --fallback-gradient: linear-gradient(135deg, #0D2818 0%, #1A4D2E 50%, #05140A 100%);
+}
+
+* { margin: 0; padding: 0; box-sizing: border-box; }
+
+html { scroll-behavior: auto; }
+
+body {
+  background: var(--jungle-deep);
+  color: var(--ivory);
+  font-family: 'Inter', sans-serif;
+  font-weight: 300;
+  line-height: 1.65;
+  overflow-x: hidden;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+img { display: block; max-width: 100%; height: auto; }
+a { color: inherit; text-decoration: none; }
+button { font-family: inherit; cursor: pointer; border: none; background: none; color: inherit; }
+::selection { background: var(--gold); color: var(--jungle-deep); }
+
+.img-wrap {
+  background: var(--fallback-gradient);
+  position: relative;
+  overflow: hidden;
+}
+.img-wrap img {
+  position: relative;
+  z-index: 1;
+}
+.img-wrap.is-fallback img { display: none; }
+.img-wrap.is-fallback::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background:
+    var(--fallback-gradient),
+    radial-gradient(circle at 30% 40%, rgba(201,162,39,0.08) 0%, transparent 50%),
+    radial-gradient(circle at 70% 60%, rgba(143,188,143,0.06) 0%, transparent 50%);
+}
+
+.serif { font-family: 'Cormorant Garamond', serif; font-weight: 400; }
+
+.eyebrow {
+  display: inline-flex;
+  align-items: center;
+  font: 500 11px/1 'Inter', sans-serif;
+  letter-spacing: 0.32em;
+  text-transform: uppercase;
+  color: var(--gold);
+  opacity: 0;
+  transform: translateY(14px);
+  transition: opacity 600ms var(--ease-quiet), transform 600ms var(--ease-quiet);
+}
+.eyebrow::after {
+  content: '';
+  display: inline-block;
+  width: 0;
+  height: 1px;
+  margin-left: 0.9rem;
+  background: var(--gold);
+  transition: width 800ms var(--ease-quiet) 400ms;
+}
+.is-in .eyebrow { opacity: 1; transform: none; transition-delay: 80ms; }
+.is-in .eyebrow::after { width: 2.4rem; }
+
+h1, h2, h3, h4 {
+  font-family: 'Cormorant Garamond', serif;
+  font-weight: 400;
+  line-height: 1.05;
+  letter-spacing: -0.01em;
+  color: var(--ivory);
+}
+h1 .italic, h2 .italic, h3 .italic { font-style: italic; color: var(--gold-light); }
+
+section { position: relative; padding: 8rem 2rem; }
+.container { max-width: 1400px; margin: 0 auto; }
+.container--narrow { max-width: 860px; margin: 0 auto; }
+.container--wide { max-width: 1600px; margin: 0 auto; }
+
+@media (max-width: 768px) {
+  section { padding: 5rem 1.5rem; }
+}
+
+.nav {
+  position: fixed; top: 0; left: 0; right: 0;
+  z-index: 100;
+  padding: 1.6rem 2rem;
+  display: flex; justify-content: space-between; align-items: center;
+  transition: background-color 600ms var(--ease-quiet), padding 400ms var(--ease-quiet);
+  background: transparent;
+}
+.nav.is-scrolled {
+  background: rgba(5, 20, 10, 0.85);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  padding: 1.1rem 2rem;
+  border-bottom: 1px solid var(--hairline);
+}
+.nav__brand {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 1.6rem;
+  letter-spacing: 0.18em;
+  color: var(--ivory);
+  display: flex; align-items: baseline; gap: 0.4rem;
+}
+.nav__brand span { color: var(--gold); font-weight: 500; }
+.nav__menu { display: flex; gap: 2.5rem; list-style: none; }
+.nav__menu a {
+  font: 500 11px/1 'Inter', sans-serif;
+  letter-spacing: 0.28em;
+  text-transform: uppercase;
+  color: var(--ivory);
+  position: relative;
+  padding: 0.4rem 0;
+  transition: color 300ms var(--ease-precise);
+}
+.nav__menu a::after {
+  content: '';
+  position: absolute; left: 0; bottom: -2px;
+  width: 0; height: 1px;
+  background: var(--gold);
+  transition: width 400ms var(--ease-quiet);
+}
+.nav__menu a:hover { color: var(--gold); }
+.nav__menu a:hover::after { width: 100%; }
+.nav__cta {
+  border: 1px solid var(--gold);
+  padding: 0.7rem 1.4rem;
+  font: 500 11px/1 'Inter', sans-serif;
+  letter-spacing: 0.24em;
+  text-transform: uppercase;
+  color: var(--gold);
+  transition: background-color 300ms var(--ease-precise), color 300ms var(--ease-precise);
+}
+.nav__cta:hover { background: var(--gold); color: var(--jungle-deep); }
+.nav__burger { display: none; }
+
+@media (max-width: 900px) {
+  .nav__menu { display: none; }
+  .nav__burger {
+    display: flex; flex-direction: column; gap: 5px;
+    background: none; border: none; padding: 0.5rem;
+  }
+  .nav__burger span { width: 22px; height: 1px; background: var(--ivory); }
+  .nav__cta { display: none; }
+}
+
+.mobile-menu {
+  position: fixed; inset: 0;
+  background: var(--jungle-deep);
+  z-index: 99;
+  display: flex; flex-direction: column;
+  justify-content: center; align-items: center;
+  gap: 2.5rem;
+  opacity: 0; pointer-events: none;
+  transition: opacity 400ms var(--ease-quiet);
+}
+.mobile-menu.is-open { opacity: 1; pointer-events: all; }
+.mobile-menu a {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 2rem;
+  color: var(--ivory);
+}
+.mobile-menu a:hover { color: var(--gold); }
+
+.hero {
+  position: relative;
+  min-height: 100vh;
+  padding: 0;
+  overflow: hidden;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--fallback-gradient);
+}
+.hero__bg {
+  position: absolute; inset: 0;
+  background: url('images/hero-bg.jpg') center/cover no-repeat;
+  background-color: var(--jungle-primary);
+  animation: kenburns 24s ease-in-out infinite alternate;
+  z-index: 1;
+}
+.hero__bg::after {
+  content: '';
+  position: absolute; inset: 0;
+  background:
+    linear-gradient(180deg, rgba(5,20,10,0.55) 0%, rgba(5,20,10,0.35) 40%, rgba(5,20,10,0.85) 100%),
+    radial-gradient(ellipse at center, transparent 0%, rgba(5,20,10,0.6) 100%);
+}
+@keyframes kenburns {
+  0%   { transform: scale(1.08) translate(-1%, -1%); }
+  100% { transform: scale(1.18) translate(1.5%, 1.5%); }
+}
+
+.hero__particles {
+  position: absolute; inset: 0;
+  z-index: 2;
+  pointer-events: none;
+}
+.particle {
+  position: absolute;
+  border-radius: 50%;
+  background: radial-gradient(circle, var(--gold-light) 0%, transparent 70%);
+  opacity: 0;
+  will-change: transform, opacity;
+}
+
+.hero__content {
+  position: relative;
+  z-index: 3;
+  text-align: center;
+  max-width: 1100px;
+  padding: 0 2rem;
+}
+.hero__eyebrow {
+  font: 500 12px/1 'Inter', sans-serif;
+  letter-spacing: 0.4em;
+  text-transform: uppercase;
+  color: var(--gold);
+  margin-bottom: 2.5rem;
+  opacity: 0;
+  transform: translateY(20px);
+  animation: heroFade 1.2s var(--ease-emphasis) 0.4s forwards;
+}
+.hero__title {
+  font-family: 'Cormorant Garamond', serif;
+  font-weight: 500;
+  font-size: clamp(3.5rem, 11vw, 10rem);
+  line-height: 0.95;
+  letter-spacing: 0.02em;
+  margin-bottom: 2rem;
+}
+.hero__title .line { display: block; overflow: hidden; }
+.hero__title .inner {
+  display: block;
+  transform: translateY(110%);
+  animation: lineRise 1.4s var(--ease-emphasis) forwards;
+}
+.hero__title .line:nth-child(1) .inner { animation-delay: 0.6s; }
+.hero__title .line:nth-child(2) .inner { animation-delay: 0.8s; }
+.hero__title .gold { color: var(--gold); font-style: italic; font-weight: 400; }
+
+@keyframes lineRise { to { transform: translateY(0); } }
+@keyframes heroFade { to { opacity: 1; transform: none; } }
+
+.hero__sub {
+  font: 300 1.05rem/1.7 'Inter', sans-serif;
+  color: rgba(245, 245, 220, 0.75);
+  max-width: 540px;
+  margin: 0 auto 3rem;
+  opacity: 0;
+  transform: translateY(20px);
+  animation: heroFade 1.2s var(--ease-emphasis) 1.4s forwards;
+}
+.hero__ctas {
+  display: flex; gap: 1.2rem; justify-content: center;
+  flex-wrap: wrap;
+  opacity: 0;
+  transform: translateY(20px);
+  animation: heroFade 1.2s var(--ease-emphasis) 1.6s forwards;
+}
+
+.btn {
+  display: inline-flex;
+  align-items: center; justify-content: center;
+  gap: 0.6rem;
+  padding: 1.1rem 2.2rem;
+  font: 500 11px/1 'Inter', sans-serif;
+  letter-spacing: 0.28em;
+  text-transform: uppercase;
+  transition: all 360ms var(--ease-precise);
+  position: relative;
+  overflow: hidden;
+}
+.btn--gold { background: var(--gold); color: var(--jungle-deep); }
+.btn--gold:hover { background: var(--gold-light); transform: translateY(-2px); }
+.btn--ghost { border: 1px solid var(--hairline-strong); color: var(--ivory); }
+.btn--ghost:hover { border-color: var(--gold); color: var(--gold); }
+
+.hero__scroll {
+  position: absolute;
+  bottom: 2.5rem; left: 50%;
+  transform: translateX(-50%);
+  z-index: 3;
+  font: 500 10px/1 'Inter', sans-serif;
+  letter-spacing: 0.32em;
+  text-transform: uppercase;
+  color: rgba(245, 245, 220, 0.5);
+  display: flex; flex-direction: column; align-items: center; gap: 0.8rem;
+  opacity: 0;
+  animation: heroFade 1.2s var(--ease-emphasis) 2s forwards;
+}
+.hero__scroll::after {
+  content: '';
+  width: 1px; height: 40px;
+  background: linear-gradient(180deg, var(--gold) 0%, transparent 100%);
+  animation: scrollLine 2.4s ease-in-out infinite;
+}
+@keyframes scrollLine {
+  0%, 100% { transform: scaleY(0.6); opacity: 0.4; }
+  50% { transform: scaleY(1); opacity: 1; }
+}
+
+.section-header { margin-bottom: 5rem; }
+.section-header .eyebrow { margin-bottom: 1.5rem; }
+.section-header h2 {
+  font-size: clamp(2.5rem, 6vw, 5rem);
+  margin-bottom: 1.5rem;
+  max-width: 900px;
+}
+.section-header__lead {
+  max-width: 580px;
+  color: rgba(245, 245, 220, 0.7);
+  font-size: 1.05rem;
+  line-height: 1.7;
+}
+.section-header--center { text-align: center; }
+.section-header--center .section-header__lead { margin: 0 auto; }
+.section-header--center h2 { margin-left: auto; margin-right: auto; }
+
+.manifesto {
+  background: var(--jungle-primary);
+  position: relative;
+}
+.manifesto::before {
+  content: '';
+  position: absolute;
+  top: 0; left: 50%; transform: translateX(-50%);
+  width: 80%; max-width: 1200px;
+  height: 1px;
+  background: var(--hairline);
+}
+.manifesto__inner {
+  max-width: 1100px;
+  margin: 0 auto;
+  display: grid;
+  grid-template-columns: 1fr 1.4fr;
+  gap: 5rem;
+  align-items: center;
+}
+.manifesto__image {
+  position: relative;
+  overflow: hidden;
+  aspect-ratio: 4 / 5;
+  background: var(--fallback-gradient);
+}
+.manifesto__image img {
+  width: 100%; height: 100%;
+  object-fit: cover;
+  position: relative;
+  z-index: 1;
+  animation: kenburns-soft 18s ease-in-out infinite alternate;
+}
+@keyframes kenburns-soft {
+  0%   { transform: scale(1.05); }
+  100% { transform: scale(1.12); }
+}
+.manifesto__image::after {
+  content: '';
+  position: absolute; inset: 0;
+  border: 1px solid var(--hairline);
+  pointer-events: none;
+  z-index: 2;
+}
+.manifesto__text .eyebrow { margin-bottom: 2rem; }
+.manifesto__text h2 {
+  font-size: clamp(2.2rem, 4.5vw, 3.6rem);
+  margin-bottom: 2.5rem;
+  line-height: 1.1;
+}
+.manifesto__text .manifesto-lines {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 1.4rem;
+  line-height: 1.5;
+  color: rgba(245, 245, 220, 0.85);
+}
+.manifesto__text .manifesto-lines .line { display: block; overflow: hidden; }
+.manifesto__text .manifesto-lines .line .inner {
+  display: block;
+  transform: translateY(110%);
+  transition: transform 1100ms var(--ease-emphasis);
+  transition-delay: calc(var(--i, 0) * 140ms);
+}
+.manifesto.is-in .manifesto-lines .line .inner { transform: translateY(0); }
+.manifesto__signature {
+  margin-top: 2.5rem;
+  font: 500 11px/1 'Inter', sans-serif;
+  letter-spacing: 0.32em;
+  text-transform: uppercase;
+  color: var(--gold);
+}
+
+@media (max-width: 900px) {
+  .manifesto__inner { grid-template-columns: 1fr; gap: 3rem; }
+}
+
+.calendar { background: var(--jungle-deep); }
+.calendar__list { border-top: 1px solid var(--hairline); }
+
+.event-row {
+  display: grid;
+  grid-template-columns: 90px 1fr 1.2fr 1fr auto;
+  gap: 2rem;
+  align-items: center;
+  padding: 2.2rem 1rem;
+  border-bottom: 1px solid var(--hairline);
+  transition: background-color 400ms var(--ease-precise), padding 400ms var(--ease-precise);
+  position: relative;
+}
+.event-row:hover {
+  background: rgba(201, 162, 39, 0.04);
+  padding-left: 2rem;
+}
+.event-row__date {
+  font-family: 'Cormorant Garamond', serif;
+  color: var(--gold);
+}
+.event-row__date .day {
+  display: block;
+  font-size: 2.4rem;
+  line-height: 1;
+  font-weight: 500;
+}
+.event-row__date .month {
+  font: 500 10px/1 'Inter', sans-serif;
+  letter-spacing: 0.3em;
+  text-transform: uppercase;
+  color: rgba(201, 162, 39, 0.7);
+  margin-top: 0.4rem;
+  display: block;
+}
+.event-row__title {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 1.6rem;
+  color: var(--ivory);
+  line-height: 1.2;
+}
+.event-row__title .sub {
+  display: block;
+  font: 300 0.85rem/1.4 'Inter', sans-serif;
+  color: rgba(245, 245, 220, 0.55);
+  margin-top: 0.3rem;
+  letter-spacing: 0.02em;
+}
+.event-row__artist {
+  font-size: 0.95rem;
+  color: rgba(245, 245, 220, 0.75);
+}
+.event-row__artist .genre {
+  display: block;
+  font: 500 10px/1 'Inter', sans-serif;
+  letter-spacing: 0.24em;
+  text-transform: uppercase;
+  color: var(--gold);
+  margin-bottom: 0.4rem;
+}
+.event-row__time {
+  font: 500 11px/1.4 'Inter', sans-serif;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: rgba(245, 245, 220, 0.6);
+}
+.event-row__cta {
+  font: 500 11px/1 'Inter', sans-serif;
+  letter-spacing: 0.24em;
+  text-transform: uppercase;
+  color: var(--gold);
+  padding: 0.9rem 1.6rem;
+  border: 1px solid var(--hairline-strong);
+  transition: all 320ms var(--ease-precise);
+  white-space: nowrap;
+}
+.event-row__cta:hover {
+  background: var(--gold);
+  color: var(--jungle-deep);
+  border-color: var(--gold);
+}
+.event-row__cta.soldout {
+  color: rgba(245, 245, 220, 0.35);
+  border-color: var(--hairline);
+  pointer-events: none;
+}
+
+@media (max-width: 900px) {
+  .event-row {
+    grid-template-columns: 80px 1fr;
+    gap: 1rem 1.5rem;
+    padding: 1.8rem 0.5rem;
+  }
+  .event-row__date .day { font-size: 1.8rem; }
+  .event-row__title { font-size: 1.25rem; grid-column: 2; }
+  .event-row__artist { grid-column: 2; }
+  .event-row__time { grid-column: 2; }
+  .event-row__cta { grid-column: 1 / -1; justify-self: start; }
+  .event-row:hover { padding-left: 0.5rem; }
+}
+
+.calendar__footer {
+  margin-top: 3.5rem;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 1.5rem;
+}
+.calendar__footer .note {
+  font: 300 0.85rem/1.5 'Inter', sans-serif;
+  color: rgba(245, 245, 220, 0.5);
+  max-width: 420px;
+}
+
+.parallax-break {
+  position: relative;
+  min-height: 60vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+  background: var(--fallback-gradient);
+}
+.parallax-break__bg {
+  position: absolute;
+  inset: 0;
+  background: url('images/parallax-bg.jpg') center/cover no-repeat;
+  background-color: var(--jungle-primary);
+  animation: kenburns 30s ease-in-out infinite alternate;
+}
+.parallax-break__overlay {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(180deg, rgba(5,20,10,0.75) 0%, rgba(5,20,10,0.6) 50%, rgba(5,20,10,0.85) 100%);
+}
+.parallax-break__content {
+  position: relative;
+  z-index: 2;
+  text-align: center;
+  max-width: 760px;
+  padding: 4rem 2rem;
+}
+.parallax-break__quote {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: clamp(1.6rem, 3.5vw, 2.6rem);
+  line-height: 1.4;
+  color: var(--ivory);
+  font-style: italic;
+  margin-bottom: 1.5rem;
+}
+.parallax-break__attr {
+  font: 500 11px/1 'Inter', sans-serif;
+  letter-spacing: 0.32em;
+  text-transform: uppercase;
+  color: var(--gold);
+}
+
+@media (max-width: 768px) {
+  .parallax-break { min-height: 50vh; }
+}
+
+.experiences {
+  background: var(--jungle-mid);
+  padding: 0;
+}
+.experiences__intro {
+  padding: 8rem 2rem 5rem;
+  text-align: center;
+}
+.experiences__intro .container { max-width: 920px; }
+.experiences__intro h2 {
+  font-size: clamp(2.5rem, 6vw, 5rem);
+  margin: 1.5rem 0 2rem;
+}
+.experiences__intro p {
+  max-width: 600px;
+  margin: 0 auto;
+  color: rgba(245, 245, 220, 0.7);
+  font-size: 1.05rem;
+}
+
+.cardstack { position: relative; }
+.cardstack__pin {
+  position: relative;
+  height: 100vh;
+  overflow: hidden;
+}
+.cardstack__card {
+  position: absolute;
+  top: 50%; left: 50%;
+  transform: translate(-50%, -50%);
+  width: min(90vw, 1200px);
+  height: min(78vh, 700px);
+  display: grid;
+  grid-template-columns: 1.1fr 1fr;
+  background: var(--jungle-deep);
+  border: 1px solid var(--hairline);
+  box-shadow: 0 40px 80px -20px rgba(0,0,0,0.6);
+  will-change: transform, opacity;
+}
+.cardstack__card .card__image {
+  position: relative;
+  overflow: hidden;
+  background: var(--fallback-gradient);
+}
+.cardstack__card .card__image img {
+  width: 100%; height: 100%;
+  object-fit: cover;
+  position: relative;
+  z-index: 1;
+  animation: kenburns-soft 20s ease-in-out infinite alternate;
+}
+.cardstack__card .card__image::after {
+  content: '';
+  position: absolute; inset: 0;
+  background: linear-gradient(90deg, transparent 0%, rgba(5, 20, 10, 0.4) 100%);
+  z-index: 2;
+}
+.cardstack__card .card__body {
+  padding: 4rem;
+  display: flex; flex-direction: column;
+  justify-content: center;
+  position: relative;
+}
+.cardstack__card .card__index {
+  position: absolute;
+  top: 2.5rem; right: 3rem;
+  font: 500 11px/1 'Inter', sans-serif;
+  letter-spacing: 0.3em;
+  color: var(--gold);
+}
+.cardstack__card .card__index::before {
+  content: '';
+  display: inline-block;
+  width: 1.8rem; height: 1px;
+  background: var(--gold);
+  vertical-align: middle;
+  margin-right: 0.8rem;
+}
+.cardstack__card .eyebrow { margin-bottom: 1.5rem; opacity: 1; transform: none; }
+.cardstack__card .eyebrow::after { width: 2rem; }
+.cardstack__card h3 {
+  font-size: clamp(2rem, 4vw, 3.2rem);
+  margin-bottom: 1.5rem;
+  line-height: 1.05;
+}
+.cardstack__card .card__text {
+  color: rgba(245, 245, 220, 0.7);
+  font-size: 1rem;
+  line-height: 1.7;
+  margin-bottom: 2rem;
+  max-width: 380px;
+}
+.cardstack__card .card__details {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1.5rem;
+  margin-bottom: 2.5rem;
+  padding-top: 2rem;
+  border-top: 1px solid var(--hairline);
+}
+.cardstack__card .card__details dt {
+  font: 500 10px/1 'Inter', sans-serif;
+  letter-spacing: 0.28em;
+  text-transform: uppercase;
+  color: var(--gold);
+  margin-bottom: 0.5rem;
+}
+.cardstack__card .card__details dd {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 1.2rem;
+  color: var(--ivory);
+}
+.cardstack__card .card__cta { align-self: flex-start; }
+
+@media (max-width: 900px) {
+  .cardstack__card {
+    grid-template-columns: 1fr;
+    grid-template-rows: 40% 1fr;
+    width: 92vw;
+    height: 84vh;
+  }
+  .cardstack__card .card__body { padding: 2rem; }
+  .cardstack__card .card__details { display: none; }
+  .cardstack__card h3 { font-size: 1.8rem; }
+  .cardstack__card .card__text {
+    font-size: 0.9rem;
+    -webkit-line-clamp: 4;
+    display: -webkit-box;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+  }
+}
+
+.vip {
+  background: var(--jungle-primary);
+  position: relative;
+}
+.vip__inner {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 5rem;
+  align-items: start;
+}
+.vip__copy .eyebrow { margin-bottom: 2rem; }
+.vip__copy h2 {
+  font-size: clamp(2.4rem, 5vw, 4rem);
+  margin-bottom: 2rem;
+  line-height: 1.05;
+}
+.vip__copy p {
+  color: rgba(245, 245, 220, 0.7);
+  margin-bottom: 1.5rem;
+  font-size: 1.02rem;
+  line-height: 1.75;
+}
+.vip__perks {
+  margin-top: 2.5rem;
+  list-style: none;
+  border-top: 1px solid var(--hairline);
+}
+.vip__perks li {
+  display: grid;
+  grid-template-columns: 60px 1fr auto;
+  gap: 1.5rem;
+  padding: 1.3rem 0;
+  border-bottom: 1px solid var(--hairline);
+  align-items: center;
+}
+.vip__perks .num {
+  font-family: 'Cormorant Garamond', serif;
+  color: var(--gold);
+  font-size: 1.2rem;
+  font-style: italic;
+}
+.vip__perks .label {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 1.2rem;
+  color: var(--ivory);
+}
+.vip__perks .val {
+  font: 500 11px/1 'Inter', sans-serif;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: rgba(245, 245, 220, 0.5);
+}
+
+.vip__form {
+  background: var(--jungle-deep);
+  padding: 3rem;
+  border: 1px solid var(--hairline);
+}
+.vip__form h3 { font-size: 1.8rem; margin-bottom: 0.5rem; }
+.vip__form .form-sub {
+  font-size: 0.9rem;
+  color: rgba(245, 245, 220, 0.55);
+  margin-bottom: 2.5rem;
+}
+.form-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1.2rem;
+  margin-bottom: 1.2rem;
+}
+.form-row--single { grid-template-columns: 1fr; }
+.form-field { display: flex; flex-direction: column; }
+.form-field label {
+  font: 500 10px/1 'Inter', sans-serif;
+  letter-spacing: 0.24em;
+  text-transform: uppercase;
+  color: var(--gold);
+  margin-bottom: 0.7rem;
+}
+.form-field input,
+.form-field select,
+.form-field textarea {
+  background: transparent;
+  border: none;
+  border-bottom: 1px solid var(--hairline);
+  padding: 0.7rem 0;
+  color: var(--ivory);
+  font-family: 'Inter', sans-serif;
+  font-size: 0.95rem;
+  font-weight: 300;
+  transition: border-color 300ms var(--ease-precise);
+  width: 100%;
+}
+.form-field input:focus,
+.form-field select:focus,
+.form-field textarea:focus {
+  outline: none;
+  border-bottom-color: var(--gold);
+}
+.form-field textarea { resize: vertical; min-height: 80px; }
+.form-field select {
+  appearance: none;
+  -webkit-appearance: none;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='6' viewBox='0 0 10 6'%3E%3Cpath fill='none' stroke='%23C9A227' stroke-width='1' d='M1 1l4 4 4-4'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right 0.5rem center;
+  padding-right: 1.5rem;
+}
+.form-field select option { background: var(--jungle-deep); color: var(--ivory); }
+.form-submit {
+  margin-top: 1.5rem;
+  width: 100%;
+  padding: 1.2rem;
+  background: var(--gold);
+  color: var(--jungle-deep);
+  font: 500 11px/1 'Inter', sans-serif;
+  letter-spacing: 0.28em;
+  text-transform: uppercase;
+  transition: background 300ms var(--ease-precise);
+}
+.form-submit:hover { background: var(--gold-light); }
+.form-note {
+  margin-top: 1.2rem;
+  font-size: 0.78rem;
+  color: rgba(245, 245, 220, 0.45);
+  line-height: 1.5;
+}
+
+@media (max-width: 900px) {
+  .vip__inner { grid-template-columns: 1fr; gap: 3rem; }
+  .form-row { grid-template-columns: 1fr; }
+  .vip__form { padding: 2rem; }
+}
+
+.private {
+  background: var(--jungle-deep);
+  position: relative;
+  overflow: hidden;
+}
+.private__bg {
+  position: absolute;
+  inset: 0;
+  background: url('images/contact-bg.jpg') center/cover;
+  background-color: var(--jungle-primary);
+  opacity: 0.12;
+  z-index: 0;
+}
+.private__inner {
+  position: relative;
+  z-index: 1;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 5rem;
+  align-items: center;
+}
+.private__copy .eyebrow { margin-bottom: 2rem; }
+.private__copy h2 {
+  font-size: clamp(2.4rem, 5vw, 4rem);
+  margin-bottom: 2rem;
+  line-height: 1.05;
+}
+.private__copy p {
+  color: rgba(245, 245, 220, 0.7);
+  margin-bottom: 1.5rem;
+  font-size: 1.02rem;
+  line-height: 1.75;
+}
+.private__stats {
+  margin-top: 3rem;
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 2rem;
+  padding-top: 2.5rem;
+  border-top: 1px solid var(--hairline);
+}
+.private__stats .stat .num {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 2.4rem;
+  color: var(--gold);
+  line-height: 1;
+  display: block;
+  margin-bottom: 0.5rem;
+}
+.private__stats .stat .label {
+  font: 500 10px/1.4 'Inter', sans-serif;
+  letter-spacing: 0.24em;
+  text-transform: uppercase;
+  color: rgba(245, 245, 220, 0.6);
+}
+.private__form {
+  background: rgba(13, 40, 24, 0.7);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  padding: 3rem;
+  border: 1px solid var(--hairline);
+}
+
+@media (max-width: 900px) {
+  .private__inner { grid-template-columns: 1fr; gap: 3rem; }
+  .private__stats { grid-template-columns: 1fr 1fr; }
+  .private__form { padding: 2rem; }
+}
+
+.gallery { background: var(--jungle-mid); }
+.gallery__grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 1rem;
+}
+.gallery__item {
+  position: relative;
+  overflow: hidden;
+  aspect-ratio: 4 / 5;
+  background: var(--fallback-gradient);
+}
+.gallery__item img {
+  width: 100%; height: 100%;
+  object-fit: cover;
+  position: relative;
+  z-index: 1;
+  transition: transform 1.2s var(--ease-quiet), filter 600ms var(--ease-quiet);
+  filter: brightness(0.85) saturate(0.9);
+}
+.gallery__item:hover img {
+  transform: scale(1.05);
+  filter: brightness(1) saturate(1);
+}
+.gallery__item::after {
+  content: '';
+  position: absolute; inset: 0;
+  background: linear-gradient(180deg, transparent 60%, rgba(5, 20, 10, 0.7) 100%);
+  pointer-events: none;
+  opacity: 0.7;
+  transition: opacity 400ms var(--ease-precise);
+  z-index: 2;
+}
+.gallery__item:hover::after { opacity: 0.3; }
+.gallery__item--tall { aspect-ratio: 4 / 6; }
+
+@media (max-width: 768px) {
+  .gallery__grid { grid-template-columns: repeat(2, 1fr); }
+}
+
+.contact {
+  background: var(--jungle-primary);
+  position: relative;
+}
+.contact__inner {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 5rem;
+  align-items: start;
+}
+.contact__info .eyebrow { margin-bottom: 2rem; }
+.contact__info h2 {
+  font-size: clamp(2.4rem, 5vw, 4rem);
+  margin-bottom: 3rem;
+  line-height: 1.05;
+}
+.contact__list {
+  list-style: none;
+  border-top: 1px solid var(--hairline);
+}
+.contact__list li {
+  padding: 1.6rem 0;
+  border-bottom: 1px solid var(--hairline);
+  display: grid;
+  grid-template-columns: 130px 1fr;
+  gap: 2rem;
+  align-items: baseline;
+}
+.contact__list dt {
+  font: 500 10px/1 'Inter', sans-serif;
+  letter-spacing: 0.28em;
+  text-transform: uppercase;
+  color: var(--gold);
+}
+.contact__list dd {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 1.25rem;
+  color: var(--ivory);
+  line-height: 1.4;
+}
+.contact__list dd a:hover { color: var(--gold); }
+.contact__socials {
+  margin-top: 2.5rem;
+  display: flex;
+  gap: 1rem;
+}
+.contact__socials a {
+  width: 44px; height: 44px;
+  border: 1px solid var(--hairline-strong);
+  border-radius: 50%;
+  display: flex; align-items: center; justify-content: center;
+  transition: all 300ms var(--ease-precise);
+}
+.contact__socials a:hover {
+  border-color: var(--gold);
+  background: var(--gold);
+  color: var(--jungle-deep);
+}
+.contact__socials svg { width: 16px; height: 16px; }
+
+.contact__map {
+  margin-top: 2.5rem;
+  aspect-ratio: 4 / 3;
+  border: 1px solid var(--hairline);
+  overflow: hidden;
+  filter: grayscale(0.4) brightness(0.7) invert(0.92) hue-rotate(180deg);
+}
+.contact__map iframe { width: 100%; height: 100%; border: 0; }
+
+@media (max-width: 900px) {
+  .contact__inner { grid-template-columns: 1fr; }
+  .contact__list li { grid-template-columns: 1fr; gap: 0.4rem; }
+}
+
+.footer {
+  background: var(--jungle-deep);
+  padding: 5rem 2rem 2.5rem;
+  border-top: 1px solid var(--hairline);
+}
+.footer__inner {
+  max-width: 1400px;
+  margin: 0 auto;
+  display: grid;
+  grid-template-columns: 1.4fr 1fr 1fr 1fr;
+  gap: 3rem;
+  margin-bottom: 4rem;
+}
+.footer__brand h3 {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 2rem;
+  margin-bottom: 1rem;
+  letter-spacing: 0.06em;
+}
+.footer__brand h3 span { color: var(--gold); }
+.footer__brand p {
+  color: rgba(245, 245, 220, 0.55);
+  font-size: 0.9rem;
+  line-height: 1.7;
+  max-width: 320px;
+}
+.footer__col h4 {
+  font: 500 11px/1 'Inter', sans-serif;
+  letter-spacing: 0.28em;
+  text-transform: uppercase;
+  color: var(--gold);
+  margin-bottom: 1.5rem;
+}
+.footer__col ul { list-style: none; }
+.footer__col li { margin-bottom: 0.7rem; }
+.footer__col a {
+  font-size: 0.9rem;
+  color: rgba(245, 245, 220, 0.65);
+  transition: color 300ms var(--ease-precise);
+}
+.footer__col a:hover { color: var(--gold); }
+.footer__bottom {
+  max-width: 1400px;
+  margin: 0 auto;
+  padding-top: 2rem;
+  border-top: 1px solid var(--hairline);
+  display: flex;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 1rem;
+  font-size: 0.78rem;
+  color: rgba(245, 245, 220, 0.4);
+  letter-spacing: 0.04em;
+}
+.footer__bottom a:hover { color: var(--gold); }
+
+@media (max-width: 768px) {
+  .footer__inner { grid-template-columns: 1fr 1fr; }
+}
+
+.music-player {
+  position: fixed;
+  bottom: 1.8rem; right: 1.8rem;
+  z-index: 50;
+  display: flex; align-items: center;
+  gap: 1rem;
+  background: rgba(5, 20, 10, 0.85);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  border: 1px solid var(--hairline);
+  padding: 0.8rem 1.4rem 0.8rem 0.8rem;
+  border-radius: 60px;
+  transition: all 400ms var(--ease-quiet);
+  opacity: 0;
+  transform: translateY(20px);
+}
+.music-player.is-visible { opacity: 1; transform: translateY(0); }
+.music-player__disc {
+  width: 38px; height: 38px;
+  border-radius: 50%;
+  background: radial-gradient(circle at 50% 50%,
+    var(--gold) 0%, var(--gold) 25%,
+    var(--jungle-deep) 26%, var(--jungle-deep) 35%,
+    var(--gold-dark) 36%, var(--gold-dark) 100%);
+  border: 1px solid var(--gold);
+  position: relative;
+  flex-shrink: 0;
+}
+.music-player__disc::after {
+  content: '';
+  position: absolute;
+  top: 50%; left: 50%;
+  width: 4px; height: 4px;
+  background: var(--jungle-deep);
+  border-radius: 50%;
+  transform: translate(-50%, -50%);
+}
+.music-player.is-playing .music-player__disc {
+  animation: spin-cw 6s linear infinite;
+}
+@keyframes spin-cw {
+  from { transform: rotate(0); }
+  to   { transform: rotate(360deg); }
+}
+.music-player__info {
+  display: flex; flex-direction: column;
+  font-size: 0.78rem;
+  line-height: 1.3;
+}
+.music-player__info .label {
+  font: 500 9px/1 'Inter', sans-serif;
+  letter-spacing: 0.28em;
+  text-transform: uppercase;
+  color: var(--gold);
+  margin-bottom: 0.3rem;
+}
+.music-player__info .track {
+  color: rgba(245, 245, 220, 0.85);
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 0.95rem;
+}
+.music-player__toggle {
+  width: 32px; height: 32px;
+  border-radius: 50%;
+  border: 1px solid var(--hairline-strong);
+  display: flex; align-items: center; justify-content: center;
+  margin-left: 0.4rem;
+  transition: all 300ms var(--ease-precise);
+}
+.music-player__toggle:hover { border-color: var(--gold); }
+.music-player__toggle svg { width: 10px; height: 10px; fill: var(--gold); }
+
+@media (max-width: 600px) {
+  .music-player { bottom: 1rem; right: 1rem; padding: 0.6rem 1rem 0.6rem 0.6rem; }
+  .music-player__info { display: none; }
+}
+
+.reveal { opacity: 0; transform: translateY(30px); transition: opacity 1s var(--ease-quiet), transform 1s var(--ease-quiet); }
+.reveal.is-in { opacity: 1; transform: none; }
+
+.reveal-stagger > * {
+  opacity: 0;
+  transform: translateY(30px);
+  transition: opacity 800ms var(--ease-quiet), transform 800ms var(--ease-quiet);
+}
+.reveal-stagger.is-in > * { opacity: 1; transform: none; }
+.reveal-stagger.is-in > *:nth-child(1) { transition-delay: 0ms; }
+.reveal-stagger.is-in > *:nth-child(2) { transition-delay: 100ms; }
+.reveal-stagger.is-in > *:nth-child(3) { transition-delay: 200ms; }
+.reveal-stagger.is-in > *:nth-child(4) { transition-delay: 300ms; }
+.reveal-stagger.is-in > *:nth-child(5) { transition-delay: 400ms; }
+.reveal-stagger.is-in > *:nth-child(6) { transition-delay: 500ms; }
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+  .hero__bg, .parallax-break__bg { animation: none; }
+  .particle { display: none; }
+}
+</style>
+</head>
+<body>
+
+<nav class="nav" id="nav">
+  <a href="#top" class="nav__brand">Space<span>550</span></a>
+  <ul class="nav__menu">
+    <li><a href="#calendar">Calendar</a></li>
+    <li><a href="#experiences">Spaces</a></li>
+    <li><a href="#vip">VIP</a></li>
+    <li><a href="#private">Private</a></li>
+    <li><a href="#gallery">Gallery</a></li>
+    <li><a href="#contact">Contact</a></li>
+  </ul>
+  <a href="#vip" class="nav__cta">Reserve</a>
+  <button class="nav__burger" id="burger" aria-label="Menu">
+    <span></span><span></span><span></span>
+  </button>
+</nav>
+<div class="mobile-menu" id="mobileMenu">
+  <a href="#calendar">Calendar</a>
+  <a href="#experiences">Spaces</a>
+  <a href="#vip">VIP</a>
+  <a href="#private">Private</a>
+  <a href="#gallery">Gallery</a>
+  <a href="#contact">Contact</a>
+</div>
+
+<header class="hero" id="top">
+  <div class="hero__bg"></div>
+  <div class="hero__particles" id="particles"></div>
+  <div class="hero__content">
+    <div class="hero__eyebrow">San Francisco · Est. 2009</div>
+    <h1 class="hero__title">
+      <span class="line"><span class="inner">Space</span></span>
+      <span class="line"><span class="inner gold">550</span></span>
+    </h1>
+    <p class="hero__sub">A late-night cathedral for dance music on the edge of Bayview. Four rooms, custom Funktion-One sound, and a 5 AM license. Doors at ten.</p>
+    <div class="hero__ctas">
+      <a href="#calendar" class="btn btn--gold">Get Tickets</a>
+      <a href="#vip" class="btn btn--ghost">Reserve a Table</a>
+    </div>
+  </div>
+  <div class="hero__scroll">Scroll</div>
+</header>
+
+<section class="manifesto" id="about" data-reveal>
+  <div class="manifesto__inner">
+    <div class="manifesto__image img-wrap">
+      <img src="images/about-1.jpg" alt="Interior detail of Space 550" loading="lazy">
+    </div>
+    <div class="manifesto__text">
+      <div class="eyebrow">The Room</div>
+      <h2>A room built for the long set, the late night, and the low end.</h2>
+      <div class="manifesto-lines">
+        <span class="line"><span class="inner">For fifteen years, the corner of Barneveld and Jennings</span></span>
+        <span class="line"><span class="inner">has held the city's lowest frequencies and longest nights.</span></span>
+        <span class="line"><span class="inner">No bottle-service theatre, no velvet pretension —</span></span>
+        <span class="line"><span class="inner">just a Funktion-One stack, a wood floor,</span></span>
+        <span class="line"><span class="inner">and four walls that have heard everything.</span></span>
+      </div>
+      <div class="manifesto__signature">— Marcus Vale, Founder</div>
+    </div>
+  </div>
+</section>
+
+<section class="parallax-break" data-reveal>
+  <div class="parallax-break__bg"></div>
+  <div class="parallax-break__overlay"></div>
+  <div class="parallax-break__content">
+    <p class="parallax-break__quote">"The best rooms in the world don't try too hard. They just sound right, feel right, and stay open late enough."</p>
+    <p class="parallax-break__attr">— Resident Advisor, 2019</p>
+  </div>
+</section>
+
+<section class="calendar" id="calendar" data-reveal>
+  <div class="container">
+    <div class="section-header section-header--center">
+      <div class="eyebrow">Upcoming · November — December</div>
+      <h2>What's on at Space 550</h2>
+      <p class="section-header__lead">Select nights below to purchase tickets. All events are 21+ with valid ID. Doors open at 10 PM unless noted.</p>
+    </div>
+
+    <div class="calendar__list">
+
+      <div class="event-row reveal">
+        <div class="event-row__date">
+          <span class="day">15</span>
+          <span class="month">Fri · Nov</span>
+        </div>
+        <div class="event-row__title">
+          Deep House Sessions Vol. 04
+          <span class="sub">with resident opening set by Mara K</span>
+        </div>
+        <div class="event-row__artist">
+          <span class="genre">House</span>
+          DJ Marais (Paris) · Lindberg · Mara K
+        </div>
+        <div class="event-row__time">10 PM → 4 AM<br>Main Floor</div>
+        <a href="#" class="event-row__cta">Tickets · $35</a>
+      </div>
+
+      <div class="event-row reveal">
+        <div class="event-row__date">
+          <span class="day">16</span>
+          <span class="month">Sat · Nov</span>
+        </div>
+        <div class="event-row__title">
+          Neon Moon
+          <span class="sub">annual techno showcase, fourth edition</span>
+        </div>
+        <div class="event-row__artist">
+          <span class="genre">Techno</span>
+          Helena Hauff · Phase Fatale · Silent Servant
+        </div>
+        <div class="event-row__time">10 PM → 5 AM<br>All Rooms</div>
+        <a href="#" class="event-row__cta">Tickets · $55</a>
+      </div>
+
+      <div class="event-row reveal">
+        <div class="event-row__date">
+          <span class="day">22</span>
+          <span class="month">Fri · Nov</span>
+        </div>
+        <div class="event-row__title">
+          Subsonic: Bass Night
+          <span class="sub">Funktion-One showcase · custom sub array</span>
+        </div>
+        <div class="event-row__artist">
+          <span class="genre">Bass / UK</span>
+          Walton · Lakuti · Object Blue
+        </div>
+        <div class="event-row__time">10 PM → 4 AM<br>Main Floor</div>
+        <a href="#" class="event-row__cta">Tickets · $40</a>
+      </div>
+
+      <div class="event-row reveal">
+        <div class="event-row__date">
+          <span class="day">23</span>
+          <span class="month">Sat · Nov</span>
+        </div>
+        <div class="event-row__title">
+          Disco Deviance
+          <span class="sub">a tribute to the paradise years</span>
+        </div>
+        <div class="event-row__artist">
+          <span class="genre">Disco / Edit</span>
+          DJ Tennis · Mood Hut Soundsystem
+        </div>
+        <div class="event-row__time">10 PM → 4 AM<br>Main + Mezzanine</div>
+        <a href="#" class="event-row__cta soldout">Sold Out</a>
+      </div>
+
+      <div class="event-row reveal">
+        <div class="event-row__date">
+          <span class="day">29</span>
+          <span class="month">Fri · Nov</span>
+        </div>
+        <div class="event-row__title">
+          Thanksgiving Eve
+          <span class="sub">the city's largest homecoming night</span>
+        </div>
+        <div class="event-row__artist">
+          <span class="genre">Open Format</span>
+          Claude VonStroke · Justin Martin · Worthy
+        </div>
+        <div class="event-row__time">9 PM → 4 AM<br>All Rooms</div>
+        <a href="#" class="event-row__cta">Tickets · $65</a>
+      </div>
+
+      <div class="event-row reveal">
+        <div class="event-row__date">
+          <span class="day">06</span>
+          <span class="month">Fri · Dec</span>
+        </div>
+        <div class="event-row__title">
+          Atlas: A Night of Progressive House
+          <span class="sub">five-hour headline set</span>
+        </div>
+        <div class="event-row__artist">
+          <span class="genre">Progressive</span>
+          Yotto (Helsinki)
+        </div>
+        <div class="event-row__time">10 PM → 4 AM<br>Main Floor</div>
+        <a href="#" class="event-row__cta">Tickets · $45</a>
+      </div>
+
+      <div class="event-row reveal">
+        <div class="event-row__date">
+          <span class="day">14</span>
+          <span class="month">Sat · Dec</span>
+        </div>
+        <div class="event-row__title">
+          Space 550 Anniversary
+          <span class="sub">fifteen years · all rooms · extended hours</span>
+        </div>
+        <div class="event-row__artist">
+          <span class="genre">Various</span>
+          TBA — Past residents return
+        </div>
+        <div class="event-row__time">9 PM → 5 AM<br>All Rooms</div>
+        <a href="#" class="event-row__cta">Tickets · $75</a>
+      </div>
+
+      <div class="event-row reveal">
+        <div class="event-row__date">
+          <span class="day">31</span>
+          <span class="month">Tue · Dec</span>
+        </div>
+        <div class="event-row__title">
+          New Year's Eve: The Long Count
+          <span class="sub">champagne at midnight · breakfast at 4 AM</span>
+        </div>
+        <div class="event-row__artist">
+          <span class="genre">NYE Showcase</span>
+          Black Coffee · Bedouin · DJ Three
+        </div>
+        <div class="event-row__time">9 PM → 5 AM<br>All Rooms</div>
+        <a href="#" class="event-row__cta">Tickets · $125</a>
+      </div>
+
+    </div>
+
+    <div class="calendar__footer">
+      <p class="note">Looking for a complete season schedule? Our full calendar runs through spring. Sign up for early ticket access below.</p>
+      <a href="#contact" class="btn btn--ghost">Full Calendar</a>
+    </div>
+  </div>
+</section>
+
+<section class="experiences" id="experiences">
+  <div class="experiences__intro" data-reveal>
+    <div class="container">
+      <div class="eyebrow">Four Spaces · One Night</div>
+      <h2>Choose your <span class="italic">room</span></h2>
+      <p>Each room at Space 550 has its own character, its own sound, and its own crowd. Wander between them. Find the one that holds you.</p>
+    </div>
+  </div>
+
+  <div class="cardstack" id="cardstack">
+    <div class="cardstack__pin" id="cardstack-pin">
+
+      <article class="cardstack__card" data-rotation="0">
+        <div class="card__image img-wrap"><img src="images/venue-1.jpg" alt="Main floor of Space 550" loading="lazy"></div>
+        <div class="card__body">
+          <div class="card__index">01 / 04</div>
+          <div class="eyebrow">Main Floor</div>
+          <h3>The Cathedral</h3>
+          <p class="card__text">Twelve-foot ceilings, a custom Funktion-One stack, and a 1,200 sq ft sprung wood floor. This is where the headline nights happen — the room that holds a thousand bodies without losing the bass.</p>
+          <dl class="card__details">
+            <div><dt>Capacity</dt><dd>1,000</dd></div>
+            <div><dt>Sound</dt><dd>Funktion-One</dd></div>
+            <div><dt>Hours</dt><dd>10 PM → 5 AM</dd></div>
+            <div><dt>Curator</dt><dd>Marcus Vale</dd></div>
+          </dl>
+          <a href="#calendar" class="btn btn--ghost card__cta">See Lineups</a>
+        </div>
+      </article>
+
+      <article class="cardstack__card" data-rotation="0">
+        <div class="card__image img-wrap"><img src="images/venue-2.jpg" alt="VIP lounge" loading="lazy"></div>
+        <div class="card__body">
+          <div class="card__index">02 / 04</div>
+          <div class="eyebrow">VIP Lounge</div>
+          <h3>The Velvet Room</h3>
+          <p class="card__text">A separate room behind the main floor. Twenty tables, dedicated cocktail program, and a sound system tuned for conversation. Bottle service available — minimums vary by night.</p>
+          <dl class="card__details">
+            <div><dt>Tables</dt><dd>20</dd></div>
+            <div><dt>Sound</dt><dd>Bozak / Dynacord</dd></div>
+            <div><dt>Hours</dt><dd>10 PM → 4 AM</dd></div>
+            <div><dt>Min.</dt><dd>From $500</dd></div>
+          </dl>
+          <a href="#vip" class="btn btn--ghost card__cta">Reserve a Table</a>
+        </div>
+      </article>
+
+      <article class="cardstack__card" data-rotation="0">
+        <div class="card__image img-wrap"><img src="images/venue-3.jpg" alt="Rooftop terrace" loading="lazy"></div>
+        <div class="card__body">
+          <div class="card__index">03 / 04</div>
+          <div class="eyebrow">Rooftop</div>
+          <h3>The Open Air</h3>
+          <p class="card__text">Three thousand square feet under the San Francisco sky. Heated in winter, open in summer, and home to sunset sets from Memorial Day through October. A separate soundsystem carries the music out over the bay.</p>
+          <dl class="card__details">
+            <div><dt>Capacity</dt><dd>400</dd></div>
+            <div><dt>Season</dt><dd>May → Oct</dd></div>
+            <div><dt>Bar</dt><dd>Full service</dd></div>
+            <div><dt>View</dt><dd>Bayview / SE</dd></div>
+          </dl>
+          <a href="#calendar" class="btn btn--ghost card__cta">Rooftop Nights</a>
+        </div>
+      </article>
+
+      <article class="cardstack__card" data-rotation="0">
+        <div class="card__image img-wrap"><img src="images/venue-4.jpg" alt="Mezzanine lounge" loading="lazy"></div>
+        <div class="card__body">
+          <div class="card__index">04 / 04</div>
+          <div class="eyebrow">Mezzanine</div>
+          <h3>The Loft</h3>
+          <p class="card__text">A second-story lounge overlooking the main floor. Reserve the whole space for private events, or claim a corner booth on regular nights. Quieter than below, but still connected to the room.</p>
+          <dl class="card__details">
+            <div><dt>Capacity</dt><dd>150</dd></div>
+            <div><dt>Bookings</dt><dd>Private · Semi</dd></div>
+            <div><dt>Bar</dt><dd>Dedicated</dd></div>
+            <div><dt>Sound</dt><dd>Piped + Local</dd></div>
+          </dl>
+          <a href="#private" class="btn btn--ghost card__cta">Book the Loft</a>
+        </div>
+      </article>
+
+    </div>
+  </div>
+</section>
+
+<section class="vip" id="vip" data-reveal>
+  <div class="container">
+    <div class="vip__inner">
+      <div class="vip__copy">
+        <div class="eyebrow">VIP Table Service</div>
+        <h2>A table held in your name, all night.</h2>
+        <p>Bottle service at Space 550 is built around the table, not the bill. Reserve a section in the Velvet Room, on the Mezzanine, or along the main rail — and it's yours from doors to last call.</p>
+        <p>All table reservations include expedited entry, a dedicated server, and mixers. Minimums vary by night and table location; the team will confirm specifics by email within 24 hours.</p>
+
+        <ul class="vip__perks">
+          <li>
+            <span class="num">i.</span>
+            <span class="label">Skip-the-line entry</span>
+            <span class="val">Included</span>
+          </li>
+          <li>
+            <span class="num">ii.</span>
+            <span class="label">Dedicated server for the night</span>
+            <span class="val">Included</span>
+          </li>
+          <li>
+            <span class="num">iii.</span>
+            <span class="label">Premium spirit selection</span>
+            <span class="val">À la carte</span>
+          </li>
+          <li>
+            <span class="num">iv.</span>
+            <span class="label">Champagne presentations</span>
+            <span class="val">By request</span>
+          </li>
+          <li>
+            <span class="num">v.</span>
+            <span class="label">Late checkout (table held until 1 AM)</span>
+            <span class="val">Standard</span>
+          </li>
+        </ul>
+      </div>
+
+      <form class="vip__form" id="vipForm" onsubmit="return handleSubmit(event, 'vip')">
+        <h3>Request a Reservation</h3>
+        <p class="form-sub">Fields marked with * are required. Confirmations sent within 24 hours.</p>
+
+        <div class="form-row">
+          <div class="form-field">
+            <label for="vip-first">First Name *</label>
+            <input type="text" id="vip-first" name="first" required>
+          </div>
+          <div class="form-field">
+            <label for="vip-last">Last Name *</label>
+            <input type="text" id="vip-last" name="last" required>
+          </div>
+        </div>
+
+        <div class="form-row">
+          <div class="form-field">
+            <label for="vip-email">Email *</label>
+            <input type="email" id="vip-email" name="email" required>
+          </div>
+          <div class="form-field">
+            <label for="vip-phone">Phone *</label>
+            <input type="tel" id="vip-phone" name="phone" required>
+          </div>
+        </div>
+
+        <div class="form-row">
+          <div class="form-field">
+            <label for="vip-date">Date of Visit *</label>
+            <input type="date" id="vip-date" name="date" required>
+          </div>
+          <div class="form-field">
+            <label for="vip-size">Party Size *</label>
+            <select id="vip-size" name="size" required>
+              <option value="">Select —</option>
+              <option>2 — 3 guests</option>
+              <option>4 — 5 guests</option>
+              <option>6 — 8 guests</option>
+              <option>9 — 12 guests</option>
+              <option>13+ (multiple tables)</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="form-row">
+          <div class="form-field">
+            <label for="vip-table">Table Preference *</label>
+            <select id="vip-table" name="table" required>
+              <option value="">Select —</option>
+              <option>Velvet Room — Standard</option>
+              <option>Velvet Room — Premium</option>
+              <option>Main Floor Rail</option>
+              <option>Mezzanine Booth</option>
+              <option>Rooftop Cabana (seasonal)</option>
+              <option>No preference</option>
+            </select>
+          </div>
+          <div class="form-field">
+            <label for="vip-budget">Budget Range</label>
+            <select id="vip-budget" name="budget">
+              <option value="">Select —</option>
+              <option>$500 — $1,000</option>
+              <option>$1,000 — $2,500</option>
+              <option>$2,500 — $5,000</option>
+              <option>$5,000+</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="form-row form-row--single">
+          <div class="form-field">
+            <label for="vip-notes">Special Requests</label>
+            <textarea id="vip-notes" name="notes" placeholder="Birthday, anniversary, champagne presentation, specific spirit requests, etc."></textarea>
+          </div>
+        </div>
+
+        <button type="submit" class="form-submit">Submit Reservation Request</button>
+        <p class="form-note">By submitting you agree to be contacted by Space 550 regarding your reservation. Table minimums apply and will be confirmed prior to booking.</p>
+      </form>
+    </div>
+  </div>
+</section>
+
+<section class="private" id="private" data-reveal>
+  <div class="private__bg"></div>
+  <div class="container">
+    <div class="private__inner">
+      <div class="private__copy">
+        <div class="eyebrow">Private Events & Buyouts</div>
+        <h2>Take over a room — or the whole building.</h2>
+        <p>Space 550 hosts corporate events, product launches, film wrap parties, milestone birthdays, and full venue buyouts. Available any night of the week, with custom programming, catering, and talent booking handled in-house.</p>
+        <p>Our events team has produced over 400 private events across the last decade. Tell us what you're imagining — we'll tell you how to make it happen.</p>
+
+        <div class="private__stats">
+          <div class="stat">
+            <span class="num">1,500</span>
+            <span class="label">Total Capacity</span>
+          </div>
+          <div class="stat">
+            <span class="num">4</span>
+            <span class="label">Distinct Rooms</span>
+          </div>
+          <div class="stat">
+            <span class="num">400+</span>
+            <span class="label">Events Produced</span>
+          </div>
+        </div>
+      </div>
+
+      <form class="private__form" id="privateForm" onsubmit="return handleSubmit(event, 'private')">
+        <h3>Plan Your Event</h3>
+        <p class="form-sub">Tell us a little about your night. We'll be in touch within 48 hours.</p>
+
+        <div class="form-row">
+          <div class="form-field">
+            <label for="pe-name">Full Name *</label>
+            <input type="text" id="pe-name" name="name" required>
+          </div>
+          <div class="form-field">
+            <label for="pe-company">Company / Organization</label>
+            <input type="text" id="pe-company" name="company">
+          </div>
+        </div>
+
+        <div class="form-row">
+          <div class="form-field">
+            <label for="pe-email">Email *</label>
+            <input type="email" id="pe-email" name="email" required>
+          </div>
+          <div class="form-field">
+            <label for="pe-phone">Phone *</label>
+            <input type="tel" id="pe-phone" name="phone" required>
+          </div>
+        </div>
+
+        <div class="form-row">
+          <div class="form-field">
+            <label for="pe-type">Event Type *</label>
+            <select id="pe-type" name="type" required>
+              <option value="">Select —</option>
+              <option>Corporate Event</option>
+              <option>Product Launch</option>
+              <option>Birthday / Milestone</option>
+              <option>Bachelor / Bachelorette</option>
+              <option>Film / Wrap Party</option>
+              <option>Holiday Party</option>
+              <option>Full Venue Buyout</option>
+              <option>Other</option>
+            </select>
+          </div>
+          <div class="form-field">
+            <label for="pe-date">Preferred Date *</label>
+            <input type="date" id="pe-date" name="date" required>
+          </div>
+        </div>
+
+        <div class="form-row">
+          <div class="form-field">
+            <label for="pe-guests">Estimated Guests *</label>
+            <select id="pe-guests" name="guests" required>
+              <option value="">Select —</option>
+              <option>50 — 100</option>
+              <option>100 — 250</option>
+              <option>250 — 500</option>
+              <option>500 — 1,000</option>
+              <option>1,000+ (buyout)</option>
+            </select>
+          </div>
+          <div class="form-field">
+            <label for="pe-budget">Budget Range</label>
+            <select id="pe-budget" name="budget">
+              <option value="">Select —</option>
+              <option>Under $10,000</option>
+              <option>$10,000 — $25,000</option>
+              <option>$25,000 — $50,000</option>
+              <option>$50,000 — $100,000</option>
+              <option>$100,000+</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="form-row form-row--single">
+          <div class="form-field">
+            <label for="pe-details">Event Details *</label>
+            <textarea id="pe-details" name="details" required placeholder="Tell us about your vision — vibe, must-haves, talent preferences, catering needs, timing, etc."></textarea>
+          </div>
+        </div>
+
+        <button type="submit" class="form-submit">Submit Event Inquiry</button>
+        <p class="form-note">For urgent inquiries, contact our events director directly at events@space550sf.com or (415) 555-0155.</p>
+      </form>
+    </div>
+  </div>
+</section>
+
+<section class="gallery" id="gallery" data-reveal>
+  <div class="container container--wide">
+    <div class="section-header section-header--center">
+      <div class="eyebrow">From the Archive</div>
+      <h2>Nights at Space 550</h2>
+      <p class="section-header__lead">A rotating selection of images from past events. Tagged photography by our resident shooters.</p>
+    </div>
+
+    <div class="gallery__grid reveal-stagger">
+      <div class="gallery__item img-wrap">
+        <img src="images/gallery-1.jpg" alt="Crowd at Space 550" loading="lazy">
+      </div>
+      <div class="gallery__item gallery__item--tall img-wrap">
+        <img src="images/gallery-2.jpg" alt="DJ booth detail" loading="lazy">
+      </div>
+      <div class="gallery__item img-wrap">
+        <img src="images/gallery-3.jpg" alt="Velvet Room interior" loading="lazy">
+      </div>
+      <div class="gallery__item img-wrap">
+        <img src="images/gallery-4.jpg" alt="Rooftop at dusk" loading="lazy">
+      </div>
+      <div class="gallery__item gallery__item--tall img-wrap">
+        <img src="images/gallery-5.jpg" alt="Main floor crowd" loading="lazy">
+      </div>
+      <div class="gallery__item img-wrap">
+        <img src="images/gallery-6.jpg" alt="Bottle service presentation" loading="lazy">
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="contact" id="contact" data-reveal>
+  <div class="container">
+    <div class="contact__inner">
+      <div class="contact__info">
+        <div class="eyebrow">Find Us · Reach Us</div>
+        <h2>Come find the <span class="italic">room</span>.</h2>
+
+        <dl class="contact__list">
+          <li>
+            <dt>Address</dt>
+            <dd>550 Barneveld Ave<br>San Francisco, CA 94124</dd>
+          </li>
+          <li>
+            <dt>Hours</dt>
+            <dd>Fri & Sat · 10 PM → 5 AM<br>Select holiday eves · 9 PM → 5 AM</dd>
+          </li>
+          <li>
+            <dt>Phone</dt>
+            <dd><a href="tel:+14155550150">(415) 555-0150</a></dd>
+          </li>
+          <li>
+            <dt>Email</dt>
+            <dd>
+              General · <a href="mailto:info@space550sf.com">info@space550sf.com</a><br>
+              VIP · <a href="mailto:vip@space550sf.com">vip@space550sf.com</a><br>
+              Events · <a href="mailto:events@space550sf.com">events@space550sf.com</a>
+            </dd>
+          </li>
+          <li>
+            <dt>Press / Booking</dt>
+            <dd><a href="mailto:press@space550sf.com">press@space550sf.com</a></dd>
+          </li>
+        </dl>
+
+        <div class="contact__socials">
+          <a href="#" aria-label="Instagram">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="3" y="3" width="18" height="18" rx="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.5" cy="6.5" r="1" fill="currentColor"/></svg>
+          </a>
+          <a href="#" aria-label="Facebook">
+            <svg viewBox="0 0 24 24" fill="currentColor"><path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z"/></svg>
+          </a>
+          <a href="#" aria-label="X">
+            <svg viewBox="0 0 24 24" fill="currentColor"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg>
+          </a>
+          <a href="#" aria-label="SoundCloud">
+            <svg viewBox="0 0 24 24" fill="currentColor"><path d="M1.175 12.225c-.051 0-.094.046-.101.1l-.233 2.154.233 2.105c.007.058.05.1.101.1.05 0 .09-.04.099-.1l.255-2.105-.27-2.154c0-.057-.045-.1-.09-.1zm-.899.828c-.06 0-.091.037-.104.094L0 14.479l.165 1.308c0 .055.045.094.09.094s.089-.045.104-.104l.21-1.308-.21-1.319c0-.061-.044-.09-.09-.09zm1.83-1.229c-.061 0-.12.045-.12.104l-.21 2.563.225 2.458c0 .06.045.12.119.12.061 0 .105-.061.121-.12l.24-2.474-.24-2.548c-.016-.06-.061-.12-.121-.12zm.945-.089c-.075 0-.135.06-.15.135l-.193 2.64.21 2.544c.016.077.075.138.149.138.075 0 .135-.061.15-.15l.225-2.544-.21-2.64c0-.075-.075-.135-.15-.135zm1.155.36c-.005-.09-.075-.149-.159-.149-.09 0-.158.06-.164.149l-.217 2.43.21 2.563c.006.09.075.159.159.159.075 0 .148-.06.148-.159l.24-2.563zm.81-1.704c-.101 0-.18.09-.18.179l-.21 4.035.21 2.43c0 .09.08.18.18.18.094 0 .174-.09.18-.18l.24-2.43-.24-4.035c0-.09-.086-.179-.18-.179zm.959-.46c-.105 0-.195.09-.195.195l-.18 4.454.18 2.43c0 .103.09.193.195.193.104 0 .194-.09.194-.193l.21-2.43-.21-4.454c0-.105-.09-.195-.194-.195zm.989-.045c-.12 0-.21.104-.21.21l-.195 4.5.21 2.385c.015.119.104.21.21.21.12 0 .21-.104.225-.21l.225-2.385-.225-4.5c-.015-.12-.105-.21-.225-.21zm1.245.105a.234.234 0 0 0-.225-.225.234.234 0 0 0-.225.225l-.21 4.62.195 2.385c.015.119.119.224.239.224s.225-.105.225-.224l.225-2.385zm.749-1.245a.244.244 0 0 0-.24-.24c-.119 0-.24.105-.24.24l-.18 5.85.195 2.355c.016.135.121.24.255.24s.24-.105.24-.24l.21-2.355zm6.885-2.715c-.45 0-.885.09-1.275.255-.27-2.055-2.024-3.66-4.155-3.66-.54 0-1.065.105-1.531.285-.181.075-.225.149-.24.299v6.914c.016.149.121.285.27.299h6.93c1.68 0 3.045-1.35 3.045-3.045s-1.36-3.045-3.045-3.045z"/></svg>
+          </a>
+        </div>
+
+        <div class="contact__map">
+          <iframe src="https://www.openstreetmap.org/export/embed.html?bbox=-122.3985%2C37.7380%2C-122.3885%2C37.7430&layer=mapnik&marker=37.7405%2C-122.3935" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
+        </div>
+      </div>
+
+      <form class="private__form" id="contactForm" onsubmit="return handleSubmit(event, 'contact')" style="background: rgba(5, 20, 10, 0.7);">
+        <h3>Send Us a Note</h3>
+        <p class="form-sub">For general inquiries, press, or anything that doesn't fit the forms above.</p>
+
+        <div class="form-row">
+          <div class="form-field">
+            <label for="c-name">Name *</label>
+            <input type="text" id="c-name" name="name" required>
+          </div>
+          <div class="form-field">
+            <label for="c-email">Email *</label>
+            <input type="email" id="c-email" name="email" required>
+          </div>
+        </div>
+
+        <div class="form-row">
+          <div class="form-field">
+            <label for="c-subject">Subject *</label>
+            <select id="c-subject" name="subject" required>
+              <option value="">Select —</option>
+              <option>General Inquiry</option>
+              <option>Lost & Found</option>
+              <option>Press / Media</option>
+              <option>Artist Booking</option>
+              <option>Job Application</option>
+              <option>Feedback</option>
+              <option>Other</option>
+            </select>
+          </div>
+          <div class="form-field">
+            <label for="c-date">Date of Visit (if applicable)</label>
+            <input type="date" id="c-date" name="date">
+          </div>
+        </div>
+
+        <div class="form-row form-row--single">
+          <div class="form-field">
+            <label for="c-message">Message *</label>
+            <textarea id="c-message" name="message" required rows="6" placeholder="Tell us what's on your mind."></textarea>
+          </div>
+        </div>
+
+        <button type="submit" class="form-submit">Send Message</button>
+        <p class="form-note">We typically respond within 48 hours. For time-sensitive matters, please call.</p>
+      </form>
+    </div>
+  </div>
+</section>
+
+<footer class="footer">
+  <div class="footer__inner">
+    <div class="footer__brand">
+      <h3>Space<span>550</span></h3>
+      <p>A San Francisco nightclub since 2009. Four rooms, custom sound, and a 5 AM license. Located at 550 Barneveld Avenue in the Bayview.</p>
+    </div>
+    <div class="footer__col">
+      <h4>Visit</h4>
+      <ul>
+        <li><a href="#calendar">Calendar</a></li>
+        <li><a href="#vip">VIP Reservations</a></li>
+        <li><a href="#private">Private Events</a></li>
+        <li><a href="#gallery">Gallery</a></li>
+      </ul>
+    </div>
+    <div class="footer__col">
+      <h4>Info</h4>
+      <ul>
+        <li><a href="#about">About</a></li>
+        <li><a href="#contact">Contact</a></li>
+        <li><a href="#">FAQ</a></li>
+        <li><a href="#">Dress Code</a></li>
+      </ul>
+    </div>
+    <div class="footer__col">
+      <h4>Connect</h4>
+      <ul>
+        <li><a href="#">Instagram</a></li>
+        <li><a href="#">Facebook</a></li>
+        <li><a href="#">X / Twitter</a></li>
+        <li><a href="#">SoundCloud</a></li>
+      </ul>
+    </div>
+  </div>
+  <div class="footer__bottom">
+    <div>© <span id="year"></span> Space 550. All rights reserved. · <a href="#">Privacy</a> · <a href="#">Terms</a></div>
+    <div>550 Barneveld Ave, San Francisco, CA 94124 · (415) 555-0150</div>
+  </div>
+</footer>
+
+<div class="music-player" id="musicPlayer">
+  <div class="music-player__disc"></div>
+  <div class="music-player__info">
+    <span class="label">Now Playing</span>
+    <span class="track">Space 550 — Ambient</span>
+  </div>
+  <button class="music-player__toggle" id="musicToggle" aria-label="Toggle ambient music">
+    <svg id="playIcon" viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>
+    <svg id="pauseIcon" viewBox="0 0 24 24" style="display:none;"><path d="M6 4h4v16H6zm8 0h4v16h-4z"/></svg>
+  </button>
+</div>
+<audio id="ambientAudio" loop preload="none">
+  <source src="audio/ambient.mp3" type="audio/mpeg">
+</audio>
+
+<script src="https://cdn.jsdelivr.net/npm/gsap@3.12.5/dist/gsap.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/gsap@3.12.5/dist/ScrollTrigger.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/lenis@1.3.13/dist/lenis.min.js"></script>
+
+<script>
+(function() {
+  'use strict';
+
+  const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  const isTouch = window.matchMedia('(pointer: coarse)').matches;
+
+  let lenis = null;
+  if (!reduceMotion && typeof Lenis !== 'undefined') {
+    lenis = new Lenis({
+      duration: 1.2,
+      easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t)),
+      smoothWheel: true,
+      smoothTouch: false,
+    });
+    function raf(time) {
+      lenis.raf(time);
+      requestAnimationFrame(raf);
+    }
+    requestAnimationFrame(raf);
+    if (typeof gsap !== 'undefined' && typeof ScrollTrigger !== 'undefined') {
+      lenis.on('scroll', ScrollTrigger.update);
+      gsap.ticker.add((time) => lenis.raf(time * 1000));
+      gsap.ticker.lagSmoothing(0);
+    }
+  }
+
+  document.getElementById('year').textContent = new Date().getFullYear();
+
+  const nav = document.getElementById('nav');
+  function updateNav() {
+    if (window.scrollY > 60) nav.classList.add('is-scrolled');
+    else nav.classList.remove('is-scrolled');
+  }
+  updateNav();
+  window.addEventListener('scroll', updateNav, { passive: true });
+
+  const burger = document.getElementById('burger');
+  const mobileMenu = document.getElementById('mobileMenu');
+  burger.addEventListener('click', () => {
+    mobileMenu.classList.toggle('is-open');
+  });
+  mobileMenu.querySelectorAll('a').forEach(a => {
+    a.addEventListener('click', () => mobileMenu.classList.remove('is-open'));
+  });
+
+  document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+    anchor.addEventListener('click', function(e) {
+      const target = document.querySelector(this.getAttribute('href'));
+      if (target) {
+        e.preventDefault();
+        if (lenis) {
+          lenis.scrollTo(target, { offset: -60, duration: 1.4 });
+        } else {
+          target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        }
+      }
+    });
+  });
+
+  if (!reduceMotion && !isTouch) {
+    const particlesContainer = document.getElementById('particles');
+    const PARTICLE_COUNT = 14;
+    const particles = [];
+    for (let i = 0; i < PARTICLE_COUNT; i++) {
+      const p = document.createElement('div');
+      p.className = 'particle';
+      const size = 2 + Math.random() * 4;
+      p.style.width = size + 'px';
+      p.style.height = size + 'px';
+      p.style.left = (10 + Math.random() * 80) + '%';
+      p.style.top = (10 + Math.random() * 80) + '%';
+      const baseOpacity = 0.3 + Math.random() * 0.5;
+      p.style.opacity = baseOpacity;
+      particlesContainer.appendChild(p);
+      particles.push({
+        el: p,
+        x: Math.random() * window.innerWidth,
+        y: Math.random() * window.innerHeight,
+        vx: (Math.random() - 0.5) * 0.3,
+        vy: -0.2 - Math.random() * 0.4,
+        rot: Math.random() * 360,
+        vrot: (Math.random() - 0.5) * 0.5,
+        baseOpacity: baseOpacity,
+      });
+    }
+    let particleAnim;
+    function animateParticles() {
+      particles.forEach(p => {
+        p.x += p.vx;
+        p.y += p.vy;
+        p.rot += p.vrot;
+        if (p.y < -20) {
+          p.y = window.innerHeight + 20;
+          p.x = Math.random() * window.innerWidth;
+        }
+        if (p.x < -20) p.x = window.innerWidth + 20;
+        if (p.x > window.innerWidth + 20) p.x = -20;
+        p.el.style.transform = `translate(${p.x - window.innerWidth/2}px, ${p.y - window.innerHeight/2}px) rotate(${p.rot}deg)`;
+      });
+      particleAnim = requestAnimationFrame(animateParticles);
+    }
+    setTimeout(() => {
+      particles.forEach(p => {
+        p.el.style.transition = 'opacity 1.4s ease';
+        p.el.style.opacity = p.baseOpacity;
+      });
+      animateParticles();
+    }, 800);
+
+    const heroEl = document.querySelector('.hero');
+    const heroObserver = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          if (!particleAnim) animateParticles();
+        } else {
+          if (particleAnim) {
+            cancelAnimationFrame(particleAnim);
+            particleAnim = null;
+          }
+        }
+      });
+    });
+    heroObserver.observe(heroEl);
+  } else {
+    const particlesContainer = document.getElementById('particles');
+    for (let i = 0; i < 6; i++) {
+      const p = document.createElement('div');
+      p.className = 'particle';
+      const size = 2 + Math.random() * 3;
+      p.style.width = size + 'px';
+      p.style.height = size + 'px';
+      p.style.left = (15 + Math.random() * 70) + '%';
+      p.style.top = (15 + Math.random() * 70) + '%';
+      p.style.opacity = 0.4;
+      particlesContainer.appendChild(p);
+    }
+  }
+
+  const revealObserver = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        entry.target.classList.add('is-in');
+        revealObserver.unobserve(entry.target);
+      }
+    });
+  }, { threshold: 0.12, rootMargin: '0px 0px -8% 0px' });
+
+  document.querySelectorAll('[data-reveal], .reveal, .reveal-stagger').forEach(el => {
+    revealObserver.observe(el);
+  });
+
+  document.querySelectorAll('.manifesto-lines .inner').forEach((el, i) => {
+    el.style.setProperty('--i', i);
+  });
+
+  document.querySelectorAll('.img-wrap img').forEach(img => {
+    function checkImg() {
+      if (img.complete && img.naturalWidth === 0) {
+        img.parentElement.classList.add('is-fallback');
+      }
+    }
+    img.addEventListener('error', () => {
+      img.parentElement.classList.add('is-fallback');
+    });
+    checkImg();
+  });
+
+  if (typeof gsap !== 'undefined' && typeof ScrollTrigger !== 'undefined' && !reduceMotion) {
+    gsap.registerPlugin(ScrollTrigger);
+
+    const cards = document.querySelectorAll('.cardstack__card');
+    if (cards.length > 0) {
+      cards.forEach((card, i) => {
+        gsap.set(card, {
+          y: i === 0 ? 0 : window.innerHeight * 0.6,
+          opacity: i === 0 ? 1 : 0,
+          scale: 1,
+          zIndex: i,
+        });
+      });
+
+      ScrollTrigger.create({
+        trigger: '#cardstack',
+        start: 'top top',
+        end: '+=' + (cards.length * 100) + '%',
+        pin: '#cardstack-pin',
+        pinSpacing: true,
+        scrub: 1,
+        onUpdate: (self) => {
+          const seg = 1 / cards.length;
+          cards.forEach((card, i) => {
+            if (i === 0) {
+              const cp = gsap.utils.clamp(0, 1, self.progress / seg);
+              gsap.set(card, {
+                opacity: 1 - cp * 0.4,
+                scale: 1 - cp * 0.06,
+                filter: `brightness(${1 - cp * 0.4})`,
+              });
+            } else {
+              const pp = gsap.utils.clamp(0, 1, (self.progress - (i - 1) * seg) / seg);
+              const np = gsap.utils.clamp(0, 1, (self.progress - i * seg) / seg);
+              gsap.set(card, {
+                y: (1 - pp) * window.innerHeight * 0.6,
+                opacity: pp - np * 0.4,
+                scale: 1 - np * 0.06,
+                filter: `brightness(${1 - np * 0.4})`,
+                zIndex: i,
+              });
+            }
+          });
+        },
+        onLeaveBack: () => {
+          cards.forEach((card, i) => {
+            gsap.set(card, {
+              y: i === 0 ? 0 : window.innerHeight * 0.6,
+              opacity: i === 0 ? 1 : 0,
+              scale: 1,
+              filter: 'brightness(1)',
+              zIndex: i,
+            });
+          });
+        },
+      });
+    }
+  }
+
+  const musicPlayer = document.getElementById('musicPlayer');
+  const musicToggle = document.getElementById('musicToggle');
+  const audio = document.getElementById('ambientAudio');
+  const playIcon = document.getElementById('playIcon');
+  const pauseIcon = document.getElementById('pauseIcon');
+  let isPlaying = false;
+  let audioLoaded = false;
+
+  setTimeout(() => {
+    musicPlayer.classList.add('is-visible');
+  }, 2000);
+
+  function loadAudio() {
+    if (!audioLoaded) {
+      audio.load();
+      audioLoaded = true;
+    }
+  }
+
+  function playAudio() {
+    loadAudio();
+    const playPromise = audio.play();
+    if (playPromise !== undefined) {
+      playPromise.then(() => {
+        isPlaying = true;
+        musicPlayer.classList.add('is-playing');
+        playIcon.style.display = 'none';
+        pauseIcon.style.display = 'block';
+      }).catch(err => {
+        console.log('Audio playback prevented:', err);
+      });
+    }
+  }
+
+  function pauseAudio() {
+    audio.pause();
+    isPlaying = false;
+    musicPlayer.classList.remove('is-playing');
+    playIcon.style.display = 'block';
+    pauseIcon.style.display = 'none';
+  }
+
+  musicToggle.addEventListener('click', () => {
+    if (isPlaying) {
+      pauseAudio();
+    } else {
+      playAudio();
+    }
+  });
+
+  let autoplayAttempted = false;
+  function tryAutoplay() {
+    if (autoplayAttempted || isPlaying) return;
+    autoplayAttempted = true;
+    if (!isTouch && !reduceMotion) {
+      playAudio();
+    }
+    document.removeEventListener('scroll', tryAutoplay);
+    document.removeEventListener('click', tryAutoplay);
+    document.removeEventListener('keydown', tryAutoplay);
+  }
+  document.addEventListener('scroll', tryAutoplay, { once: true, passive: true });
+  document.addEventListener('click', tryAutoplay, { once: true });
+  document.addEventListener('keydown', tryAutoplay, { once: true });
+
+  window.handleSubmit = function(event, type) {
+    event.preventDefault();
+    const form = event.target;
+    const submitBtn = form.querySelector('.form-submit');
+    const originalText = submitBtn.textContent;
+
+    submitBtn.textContent = 'Sending…';
+    submitBtn.disabled = true;
+
+    setTimeout(() => {
+      submitBtn.textContent = '✓  Received — We\'ll Be in Touch';
+      submitBtn.style.background = '#1A4D2E';
+      submitBtn.style.color = '#C9A227';
+      form.reset();
+
+      setTimeout(() => {
+        submitBtn.textContent = originalText;
+        submitBtn.style.background = '';
+        submitBtn.style.color = '';
+        submitBtn.disabled = false;
+      }, 4000);
+    }, 800);
+
+    return false;
+  };
+
+  const today = new Date().toISOString().split('T')[0];
+  document.querySelectorAll('input[type="date"]').forEach(input => {
+    input.min = today;
+  });
+
+  if (isTouch) {
+    document.documentElement.classList.add('is-touch');
+  }
+
+  window.addEventListener('load', () => {
+    if (typeof ScrollTrigger !== 'undefined') {
+      ScrollTrigger.refresh();
+    }
+  });
+
+})();
+</script>
+
+</body>
+</html>
